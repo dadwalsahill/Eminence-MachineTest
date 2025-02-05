@@ -16,17 +16,24 @@ const Login = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const validateForm = () => {
+    const { email, password } = formData;
+    if (!email || !password) {
+      setError("Email and Password are required.");
+      return false;
+    }
+    setError("");
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     try {
-      const { email, password } = formData;
-      const response = await loginUser({
-        email,
-        password,
-      });
+      const response = await loginUser(formData);
       dispatch(login({ token: response.token }));
       localStorage.setItem("userEmail", response?.data?.email);
-
       navigate("/");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");

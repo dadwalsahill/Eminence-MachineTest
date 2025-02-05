@@ -48,7 +48,7 @@ const Sidebar = () => {
         <h2 className="text-xl font-semibold my-8">
           Task Management Application
         </h2>
-        <p className="mb-1 text-gray-400">{userEmail}</p>
+        <p className="mb-1 text-gray-400 d-flex justify-center">{userEmail}</p>
       </div>
       <hr className="my-2" />
 
