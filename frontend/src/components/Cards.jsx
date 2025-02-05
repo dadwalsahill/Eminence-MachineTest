@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { deleteTask, updateTaskStatus } from "../services/api";
+import ConfirmDialog from "./ConfirmDialog";
 
 const Cards = ({ tasks = [] }) => {
   const navigate = useNavigate();
@@ -10,7 +11,6 @@ const Cards = ({ tasks = [] }) => {
   const [updatingTaskId, setUpdatingTaskId] = useState(null);
 
   useEffect(() => {
-    console.log("Received tasks:", tasks);
     setTaskList(Array.isArray(tasks) ? tasks : []);
   }, [tasks]);
 
@@ -22,7 +22,6 @@ const Cards = ({ tasks = [] }) => {
     try {
       await updateTaskStatus(taskId, { status: newStatus });
 
-      // Update the task status in state
       setTaskList((prevTasks) =>
         prevTasks.map((task) =>
           task._id === taskId ? { ...task, status: newStatus } : task
@@ -61,20 +60,18 @@ const Cards = ({ tasks = [] }) => {
             <h3 className="text-lg font-semibold">{item.title}</h3>
             <p className="text-sm text-gray-300 mb-2">{item.description}</p>
 
-            {/* Due Date & Priority */}
             <div className="flex justify-between text-sm font-bold mb-4">
               <span>Due: {new Date(item.dueDate).toLocaleDateString()}</span>
               <span>Priority: {item.priority}</span>
             </div>
 
-            {/* Button Section */}
             <div className="mt-4 w-full flex items-center">
               <button
                 className={`${
                   item.status === "Completed" ? "bg-green-400" : "bg-red-400"
-                } p-2 rounded w-3/6 transform transition-all duration-500 ease-in-out ${
+                } p-2 rounded w-3/6 transform transition-all duration-500 ease-in-out cursor-pointer ${
                   updatingTaskId === item._id ? "scale-95" : "scale-100"
-                }`}
+                } hover:brightness-90`}
                 onClick={() => handleStatusChange(item._id, item.status)}
               >
                 {item.status === "Completed"
@@ -84,14 +81,20 @@ const Cards = ({ tasks = [] }) => {
 
               <div className="text-white p-2 w-3/6 text-xl font-semibold flex justify-around">
                 <button
-                  className="hover:text-blue-400 transition"
+                  className="hover:text-blue-400 transition cursor-pointer"
                   onClick={() => navigate(`/edit-task/${item._id}`)}
                 >
                   <FaEdit />
                 </button>
                 <button
-                  className="hover:text-yellow-400 transition"
-                  onClick={() => handleDelete(item._id)}
+                  className="hover:text-yellow-400 transition cursor-pointer"
+                  onClick={() =>
+                    ConfirmDialog(
+                      "Are you sure?",
+                      "Do you want to delete this task?",
+                      () => handleDelete(item._id)
+                    )
+                  }
                 >
                   <MdDelete />
                 </button>

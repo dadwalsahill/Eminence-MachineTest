@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/authSlice";
@@ -24,11 +24,9 @@ const Login = () => {
         email,
         password,
       });
-      console.log("Login response:", response);
-      // Store token in HttpOnly cookies via backend response
       dispatch(login({ token: response.token }));
+      localStorage.setItem("userEmail", response?.data?.email);
 
-      // Redirect to home after successful login
       navigate("/");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");

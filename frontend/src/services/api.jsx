@@ -1,10 +1,11 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://eminence-server.vercel.app/api";
 
 const api = axios.create({
   baseURL: API_URL,
   headers: { "Content-Type": "application/json" },
+  withCredentials: true,
 });
 
 // Function to handle authenticated requests (automatically sends token)
@@ -21,6 +22,9 @@ export const register = async (data) => {
 
 export const loginUser = async (data) => {
   return await api.post("/users/signin", data, { withCredentials: true });
+};
+export const logOutUser = async (data) => {
+  return await api.post("/users/logout", data, { withCredentials: true });
 };
 
 // Authenticated APIs (Token Required, sent via cookies)

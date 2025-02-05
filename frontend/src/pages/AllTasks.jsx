@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { getTasks } from "../services/api";
 import Cards from "../components/Cards";
 import Header from "../components/Header";
@@ -14,7 +14,7 @@ const AllTasks = () => {
       try {
         const response = await getTasks();
         setTasks(response.data.tasks || []);
-        setFilteredTasks(response.data.tasks || []); // Set all tasks initially
+        setFilteredTasks(response.data.tasks || []);
       } catch (error) {
         console.error("Error fetching tasks:", error);
       }
