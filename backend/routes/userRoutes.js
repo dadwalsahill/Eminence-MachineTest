@@ -1,6 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { signup, signin, verifyToken } = require("../controller/userController");
+const {
+  signup,
+  signin,
+  verifyToken,
+  logout,
+} = require("../controller/userController");
 const { body } = require("express-validator");
 
 // Sign up route
@@ -25,6 +30,7 @@ router.post(
   ],
   signin
 );
+router.post("/logout", logout);
 router.get("/verify-token", verifyToken);
 
 module.exports = router;

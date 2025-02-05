@@ -51,11 +51,11 @@ exports.signin = async (req, res) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure: false,
-    sameSite: "Strict",
+    secure: true,
+    sameSite: "none",
   });
 
-  res.json({ message: "Login successful" });
+  res.json({ message: "Login successful", email: user.email });
 };
 
 exports.verifyToken = async (req, res) => {
@@ -71,4 +71,13 @@ exports.verifyToken = async (req, res) => {
   } catch (error) {
     res.status(401).json({ message: "Invalid token" });
   }
+};
+exports.logout = async (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
+
+  res.json({ message: "Logout successful" });
 };
