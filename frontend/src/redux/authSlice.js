@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  isLoggedIn: false,
+  isLoggedIn: localStorage.getItem("isLoggedIn") === "true", // Read from localStorage
 };
 
 const authSlice = createSlice({
@@ -10,23 +10,14 @@ const authSlice = createSlice({
   reducers: {
     login: (state) => {
       state.isLoggedIn = true;
-      if (typeof window !== "undefined") {
-        localStorage.setItem("isLoggedIn", "true"); // Persist login state in localStorage
-      }
+      localStorage.setItem("isLoggedIn", "true"); // Persist login state
     },
     logout: (state) => {
       state.isLoggedIn = false;
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("isLoggedIn"); // Clear on logout
-      }
-    },
-    setLoginState: (state) => {
-      if (typeof window !== "undefined") {
-        state.isLoggedIn = localStorage.getItem("isLoggedIn") === "true"; // Access localStorage only in client-side
-      }
+      localStorage.removeItem("isLoggedIn"); // Clear on logout
     },
   },
 });
 
-export const { login, logout, setLoginState } = authSlice.actions;
+export const { login, logout } = authSlice.actions;
 export default authSlice.reducer;

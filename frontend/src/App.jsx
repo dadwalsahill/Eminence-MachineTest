@@ -4,7 +4,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import AllTasks from "./pages/AllTasks";
@@ -12,15 +12,9 @@ import CompletedTasks from "./pages/CompletedTasks";
 import InCompleteTasks from "./pages/InCompleteTasks";
 import TaskForm from "./pages/TaskForm";
 import Register from "./pages/Register";
-import { useEffect } from "react";
-import { setLoginState } from "./redux/authSlice";
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(setLoginState());
-  }, [dispatch]);
 
   return (
     <Router>
@@ -30,7 +24,10 @@ const App = () => {
           path="/login"
           element={isLoggedIn ? <Navigate to="/" /> : <Login />}
         />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/register"
+          element={isLoggedIn ? <Navigate to="/" /> : <Register />}
+        />
 
         {/* Protected Routes */}
         {isLoggedIn ? (
